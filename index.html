@@ -4,37 +4,102 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kalkulator Harga Jual Shopee</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f4f9;
       padding: 20px;
       font-size: 18px;
+      color: #333;
     }
 
-    input[type="number"] {
-      font-size: 18px;
-      padding: 8px;
+    h1, h2 {
+      color: #2c3e50;
+    }
+
+    label {
+      font-weight: 500;
+      margin-top: 10px;
+      display: block;
+    }
+
+    input[type="number"], button {
+      font-size: 16px;
+      padding: 10px;
       width: 100%;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
       box-sizing: border-box;
     }
 
     button {
-      font-size: 18px;
-      padding: 10px 20px;
-      margin-top: 10px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #2980b9;
     }
 
     .warning-box {
       background-color: #ffcccc;
-      padding: 10px;
+      padding: 15px;
       border-radius: 5px;
       font-size: 16px;
       margin-bottom: 15px;
+      box-sizing: border-box;
     }
 
     .hasil {
       margin-top: 20px;
       font-weight: bold;
+      color: #2c3e50;
+    }
+
+    #input-list {
+      margin-top: 15px;
+    }
+
+    .input-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .input-item input {
+      width: 80%;
+    }
+
+    .input-item button {
+      width: 15%;
+      background-color: #e74c3c;
+    }
+
+    /* Dark Mode Support */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #121212;
+        color: #e0e0e0;
+      }
+
+      input[type="number"], button {
+        background-color: #333;
+        color: #fff;
+        border: 1px solid #555;
+      }
+
+      .warning-box {
+        background-color: #663333;
+      }
+
+      .hasil {
+        color: #e0e0e0;
+      }
     }
   </style>
 </head>
@@ -72,7 +137,7 @@
   </div>
 
   <div id="input-list">
-    <div>
+    <div class="input-item">
       <input type="number" class="bersih" value="10000" min="1000" step="1000">
     </div>
   </div>
@@ -91,6 +156,7 @@
     function tambahInput() {
       const container = document.getElementById("input-list");
       const input = document.createElement("div");
+      input.classList.add("input-item");
       input.innerHTML = '<input type="number" class="bersih" value="10000" min="1000" step="1000">';
       container.appendChild(input);
     }
