@@ -91,9 +91,16 @@
     }
 
     .hapus-btn {
-      background-color: #e74c3c;
+      background-color: white;
+      color: #333;
+      border: 1px solid #ccc;
       padding: 10px;
       border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .hapus-btn:hover {
+      background-color: #f0f0f0;
     }
 
     .hasil {
@@ -115,7 +122,7 @@
   <div class="section">
     <h2>Pengaturan Biaya Tambahan</h2>
     <div class="warning-box">
-      Harap isi biaya ter-update berdasarkan kebijakan Shopee.
+      Harap isi biaya ter-update berdasarkan kebijakan Shopee. Semua input bersifat opsional tergantung kebutuhan toko.
     </div>
 
     <label>Biaya Administrasi (%)</label>
@@ -140,12 +147,15 @@
   <div class="section">
     <h2>Target Penghasilan Bersih</h2>
     <div class="warning-box">
-      Masukkan penghasilan bersih yang diinginkan. Contoh: jika harga produk 120000 dan biaya packing 3000, maka masukkan 123000.
+      Masukkan jumlah penghasilan bersih yang Anda harapkan dari produk yang dijual.<br>
+      Contoh: jika Anda menjual photocard seharga <strong>Rp120.000</strong> dengan biaya packing <strong>Rp3.000</strong>,
+      maka tulis <strong>Rp123.000</strong> sebagai penghasilan bersih.<br>
+      Harga jual yang dihitung adalah harga yang perlu Anda pasang di Shopee.
     </div>
 
     <div id="input-list">
       <div class="input-item">
-        <input type="text" class="bersih" placeholder="Contoh: 10000">
+        <input type="text" class="bersih" placeholder="10000">
       </div>
     </div>
 
@@ -165,45 +175,46 @@
       const container = document.getElementById("input-list");
       const div = document.createElement("div");
       div.className = "input-item";
-      div.innerHTML = `<input type="text" class="bersih" placeholder="Contoh: 10000">
+      div.innerHTML = `<input type="text" class="bersih" placeholder="10000">
                        <button class="hapus-btn" onclick="this.parentElement.remove()">🗑️</button>`;
       container.appendChild(div);
+    }
+
+    function parseOrZero(value) {
+      const num = parseFloat(value.replace(',', '.'));
+      return isNaN(num) ? 0 : num;
     }
 
     function hitungHarga() {
       const hasilDiv = document.getElementById("hasil");
       hasilDiv.innerHTML = "";
 
-      // Ambil semua input dan validasi
       const bersihInputs = Array.from(document.querySelectorAll(".bersih"));
-      const inputs = [
-        { id: "p_admin", max: 100 },
-        { id: "p_premi", max: 100 },
-        { id: "p_layanan", max: 100 },
-        { id: "p_promo", max: 100 },
-        { id: "biaya_program", max: 10000000 },
-        { id: "biaya_proses", max: 10000000 },
-      ];
+      const paramIds = ["p_admin", "p_premi", "p_layanan", "p_promo", "biaya_program", "biaya_proses"];
+      const params = {};
 
+      // Reset error state
+      document.querySelectorAll("input").forEach(el => el.classList.remove("error"));
       let error = false;
 
-      // Reset error styles
-      document.querySelectorAll("input").forEach(el => el.classList.remove("error"));
-
-      // Validasi biaya input
-      let params = {};
-      for (const { id, max } of inputs) {
-        const val = document.getElementById(id).value.trim();
-        const num = parseFloat(val);
-        if (isNaN(num) || num < 0 || num > max) {
-          document.getElementById(id).classList.add("error");
-          error = true;
+      // Ambil nilai parameter biaya (kosong = dianggap 0)
+      for (const id of paramIds) {
+        const el = document.getElementById(id);
+        const val = el.value.trim();
+        if (val === "") {
+          params[id] = 0;
         } else {
-          params[id] = id.startsWith("p_") ? num / 100 : num;
+          const num = parseOrZero(val);
+          if (isNaN(num) || num < 0) {
+            el.classList.add("error");
+            error = true;
+          } else {
+            params[id] = id.startsWith("p_") ? num / 100 : num;
+          }
         }
       }
 
-      // Validasi setiap penghasilan bersih
+      // Ambil nilai bersih
       const bersihValues = [];
       for (const input of bersihInputs) {
         const val = input.value.trim();
