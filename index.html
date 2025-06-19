@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalkulator Harga Jual Shopee</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      font-size: 18px;
+    }
+
+    input[type="number"] {
+      font-size: 18px;
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
+
+    .warning-box {
+      background-color: #ffcccc;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .hasil {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kalkulator Harga Jual Shopee</h1>
+
+  <h2>Pengaturan Biaya Tambahan</h2>
+  <div class="warning-box">
+    Harap isi biaya ter-update berdasarkan kebijakan Shopee dengan benar.
+  </div>
+
+  <label>Biaya Administrasi (%)</label>
+  <input type="number" id="p_admin" step="0.1" value="0">
+
+  <label>Biaya Premi Asuransi (%)</label>
+  <input type="number" id="p_premi" step="0.1" value="0">
+
+  <label>Biaya Layanan Gratis Ongkir Xtra (%)</label>
+  <input type="number" id="p_layanan" step="0.1" value="0">
+
+  <label>Biaya Layanan Promo Xtra (%)</label>
+  <input type="number" id="p_promo" step="0.1" value="0">
+
+  <label>Biaya Program Hemat Pengembalian (Rp)</label>
+  <input type="number" id="biaya_program" step="100" value="0">
+
+  <label>Biaya Proses Pesanan (Rp)</label>
+  <input type="number" id="biaya_proses" step="100" value="0">
+
+  <h2>Target Penghasilan Bersih</h2>
+  <div class="warning-box">
+    Masukkan jumlah penghasilan bersih yang Anda harapkan dari produk yang dijual.
+    <br>Contoh: jika Anda menjual produk seharga <strong>Rp120.000</strong> dengan biaya packing <strong>Rp3.000</strong>,
+    maka masukkan <strong>Rp123.000</strong>.
+  </div>
+
+  <div id="input-list">
+    <div>
+      <input type="number" class="bersih" value="10000" min="1000" step="1000">
+    </div>
+  </div>
+  <button onclick="tambahInput()">➕ Tambah Input</button>
+  <button onclick="hitungHarga()">Hitung Harga Jual</button>
+
+  <div class="hasil" id="hasil"></div>
+
+  <hr style="margin-top: 30px;">
+  <div style="text-align:center; font-size:14px;">
+    Dibuat oleh youmgzeo dan terinspirasi dari lhsnimarchieve &amp; geniustangerine.<br>
+    Hubungi <a href="https://x.com/youmgzeo" target="_blank">@youmgzeo</a> untuk kritik atau saran.
+  </div>
+
+  <script>
+    function tambahInput() {
+      const container = document.getElementById("input-list");
+      const input = document.createElement("div");
+      input.innerHTML = '<input type="number" class="bersih" value="10000" min="1000" step="1000">';
+      container.appendChild(input);
+    }
+
+    function hitungHarga() {
+      const hasilDiv = document.getElementById("hasil");
+      hasilDiv.innerHTML = "";
+
+      const bersihList = Array.from(document.querySelectorAll(".bersih")).map(input => parseInt(input.value));
+      const p_admin = parseFloat(document.getElementById("p_admin").value) / 100;
+      const p_premi = parseFloat(document.getElementById("p_premi").value) / 100;
+      const p_layanan = parseFloat(document.getElementById("p_layanan").value) / 100;
+      const p_promo = parseFloat(document.getElementById("p_promo").value) / 100;
+      const biaya_program = parseInt(document.getElementById("biaya_program").value);
+      const biaya_proses = parseInt(document.getElementById("biaya_proses").value);
+
+      const layanan_max = 20000;
+      const promo_max = 10000;
+      const flat_biaya = biaya_program + biaya_proses;
+
+      for (let bersih of bersihList) {
+        let x = bersih + flat_biaya;
+        while (true) {
+          const admin = p_admin * x;
+          const premi = p_premi * x;
+          const layanan = Math.min(p_layanan * x, layanan_max);
+          const promo = Math.min(p_promo * x, promo_max);
+          const total_biaya = admin + premi + layanan + promo + flat_biaya;
+
+          if (x - total_biaya >= bersih) {
+            hasilDiv.innerHTML += `<div>Untuk penghasilan bersih Rp ${bersih.toLocaleString("id-ID")} → harga jual: <strong>Rp ${Math.round(x).toLocaleString("id-ID")}</strong></div>`;
+            break;
+          }
+          x += 1;
+        }
+      }
+
+      hasilDiv.innerHTML += "<div style='font-size:14px;margin-top:10px;'>Catatan: disarankan untuk membulatkan harga jual ke atas agar penghasilan tidak terlalu mepet.</div>";
+    }
+  </script>
+</body>
+</html>
