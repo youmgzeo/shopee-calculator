@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kalkulator Harga Jual Shopee</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -14,31 +14,57 @@
       color: #333;
     }
 
-    h1, h2 {
-      color: #2c3e50;
+    h1 {
+      margin-bottom: 0;
+    }
+
+    .subtext {
+      margin-top: 5px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #666;
+    }
+
+    .section {
+      margin-top: 30px;
     }
 
     label {
       font-weight: 500;
-      margin-top: 10px;
       display: block;
+      margin-top: 15px;
     }
 
-    input[type="number"], button {
+    input[type="text"] {
       font-size: 16px;
       padding: 10px;
       width: 100%;
-      margin-top: 10px;
+      margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 5px;
       box-sizing: border-box;
     }
 
+    input.error {
+      border-color: red;
+      background-color: #ffe6e6;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
     button {
+      font-size: 16px;
+      padding: 10px;
+      margin-top: 20px;
       background-color: #3498db;
       color: white;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s;
     }
 
     button:hover {
@@ -50,151 +76,168 @@
       padding: 15px;
       border-radius: 5px;
       font-size: 16px;
-      margin-bottom: 15px;
-      box-sizing: border-box;
-    }
-
-    .hasil {
-      margin-top: 20px;
-      font-weight: bold;
-      color: #2c3e50;
-    }
-
-    #input-list {
-      margin-top: 15px;
+      margin-top: 10px;
     }
 
     .input-item {
       display: flex;
-      justify-content: space-between;
+      gap: 10px;
       align-items: center;
-      margin-bottom: 10px;
+      margin-top: 10px;
     }
 
     .input-item input {
-      width: 80%;
+      flex: 1;
     }
 
-    .input-item button {
-      width: 15%;
+    .hapus-btn {
       background-color: #e74c3c;
+      padding: 10px;
+      border-radius: 5px;
     }
 
-    /* Dark Mode Support */
-    @media (prefers-color-scheme: dark) {
-      body {
-        background-color: #121212;
-        color: #e0e0e0;
-      }
+    .hasil {
+      margin-top: 30px;
+      font-weight: bold;
+    }
 
-      input[type="number"], button {
-        background-color: #333;
-        color: #fff;
-        border: 1px solid #555;
-      }
-
-      .warning-box {
-        background-color: #663333;
-      }
-
-      .hasil {
-        color: #e0e0e0;
-      }
+    hr {
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
   <h1>Kalkulator Harga Jual Shopee</h1>
-
-  <h2>Pengaturan Biaya Tambahan</h2>
-  <div class="warning-box">
-    Harap isi biaya ter-update berdasarkan kebijakan Shopee dengan benar.
+  <div class="subtext">
+    Hitung harga jual berdasarkan target penghasilan bersih dan biaya tambahan Shopee.
   </div>
 
-  <label>Biaya Administrasi (%)</label>
-  <input type="number" id="p_admin" step="0.1" value="0">
-
-  <label>Biaya Premi Asuransi (%)</label>
-  <input type="number" id="p_premi" step="0.1" value="0">
-
-  <label>Biaya Layanan Gratis Ongkir Xtra (%)</label>
-  <input type="number" id="p_layanan" step="0.1" value="0">
-
-  <label>Biaya Layanan Promo Xtra (%)</label>
-  <input type="number" id="p_promo" step="0.1" value="0">
-
-  <label>Biaya Program Hemat Pengembalian (Rp)</label>
-  <input type="number" id="biaya_program" step="100" value="0">
-
-  <label>Biaya Proses Pesanan (Rp)</label>
-  <input type="number" id="biaya_proses" step="100" value="0">
-
-  <h2>Target Penghasilan Bersih</h2>
-  <div class="warning-box">
-    Masukkan jumlah penghasilan bersih yang Anda harapkan dari produk yang dijual.
-    <br>Contoh: jika Anda menjual produk seharga <strong>Rp120.000</strong> dengan biaya packing <strong>Rp3.000</strong>,
-    maka masukkan <strong>Rp123.000</strong>.
-  </div>
-
-  <div id="input-list">
-    <div class="input-item">
-      <input type="number" class="bersih" value="10000" min="1000" step="1000">
+  <div class="section">
+    <h2>Pengaturan Biaya Tambahan</h2>
+    <div class="warning-box">
+      Harap isi biaya ter-update berdasarkan kebijakan Shopee.
     </div>
+
+    <label>Biaya Administrasi (%)</label>
+    <input type="text" id="p_admin" placeholder="Contoh: 7.00">
+
+    <label>Biaya Premi Asuransi (%)</label>
+    <input type="text" id="p_premi" placeholder="Contoh: 0.50">
+
+    <label>Biaya Layanan Gratis Ongkir Xtra (%)</label>
+    <input type="text" id="p_layanan" placeholder="Contoh: 4.50">
+
+    <label>Biaya Layanan Promo Xtra (%)</label>
+    <input type="text" id="p_promo" placeholder="Contoh: 3.00">
+
+    <label>Biaya Program Hemat Pengembalian (Rp)</label>
+    <input type="text" id="biaya_program" placeholder="Contoh: 1000">
+
+    <label>Biaya Proses Pesanan (Rp)</label>
+    <input type="text" id="biaya_proses" placeholder="Contoh: 500">
   </div>
-  <button onclick="tambahInput()">➕ Tambah Input</button>
-  <button onclick="hitungHarga()">Hitung Harga Jual</button>
 
-  <div class="hasil" id="hasil"></div>
+  <div class="section">
+    <h2>Target Penghasilan Bersih</h2>
+    <div class="warning-box">
+      Masukkan penghasilan bersih yang diinginkan. Contoh: jika harga produk 120000 dan biaya packing 3000, maka masukkan 123000.
+    </div>
 
-  <hr style="margin-top: 30px;">
+    <div id="input-list">
+      <div class="input-item">
+        <input type="text" class="bersih" placeholder="Contoh: 10000">
+      </div>
+    </div>
+
+    <button onclick="tambahInput()">➕ Tambah Input</button>
+    <button onclick="hitungHarga()">Hitung Harga Jual</button>
+    <div id="hasil" class="hasil"></div>
+  </div>
+
+  <hr />
   <div style="text-align:center; font-size:14px;">
-    Dibuat oleh youmgzeo dan terinspirasi dari lhsnimarchieve &amp; geniustangerine.<br>
-    Hubungi <a href="https://x.com/youmgzeo" target="_blank">@youmgzeo</a> untuk kritik atau saran.
+    Dibuat oleh youmgzeo. Terinspirasi dari lhsnimarchieve &amp; geniustangerine.<br />
+    <a href="https://x.com/youmgzeo" target="_blank">@youmgzeo</a>
   </div>
 
   <script>
     function tambahInput() {
       const container = document.getElementById("input-list");
-      const input = document.createElement("div");
-      input.classList.add("input-item");
-      input.innerHTML = '<input type="number" class="bersih" value="10000" min="1000" step="1000">';
-      container.appendChild(input);
+      const div = document.createElement("div");
+      div.className = "input-item";
+      div.innerHTML = `<input type="text" class="bersih" placeholder="Contoh: 10000">
+                       <button class="hapus-btn" onclick="this.parentElement.remove()">🗑️</button>`;
+      container.appendChild(div);
     }
 
     function hitungHarga() {
       const hasilDiv = document.getElementById("hasil");
       hasilDiv.innerHTML = "";
 
-      const bersihList = Array.from(document.querySelectorAll(".bersih")).map(input => parseInt(input.value));
-      const p_admin = parseFloat(document.getElementById("p_admin").value) / 100;
-      const p_premi = parseFloat(document.getElementById("p_premi").value) / 100;
-      const p_layanan = parseFloat(document.getElementById("p_layanan").value) / 100;
-      const p_promo = parseFloat(document.getElementById("p_promo").value) / 100;
-      const biaya_program = parseInt(document.getElementById("biaya_program").value);
-      const biaya_proses = parseInt(document.getElementById("biaya_proses").value);
+      // Ambil semua input dan validasi
+      const bersihInputs = Array.from(document.querySelectorAll(".bersih"));
+      const inputs = [
+        { id: "p_admin", max: 100 },
+        { id: "p_premi", max: 100 },
+        { id: "p_layanan", max: 100 },
+        { id: "p_promo", max: 100 },
+        { id: "biaya_program", max: 10000000 },
+        { id: "biaya_proses", max: 10000000 },
+      ];
 
-      const layanan_max = 20000;
-      const promo_max = 10000;
-      const flat_biaya = biaya_program + biaya_proses;
+      let error = false;
 
-      for (let bersih of bersihList) {
-        let x = bersih + flat_biaya;
-        while (true) {
-          const admin = p_admin * x;
-          const premi = p_premi * x;
-          const layanan = Math.min(p_layanan * x, layanan_max);
-          const promo = Math.min(p_promo * x, promo_max);
-          const total_biaya = admin + premi + layanan + promo + flat_biaya;
+      // Reset error styles
+      document.querySelectorAll("input").forEach(el => el.classList.remove("error"));
 
-          if (x - total_biaya >= bersih) {
-            hasilDiv.innerHTML += `<div>Untuk penghasilan bersih Rp ${bersih.toLocaleString("id-ID")} → harga jual: <strong>Rp ${Math.round(x).toLocaleString("id-ID")}</strong></div>`;
-            break;
-          }
-          x += 1;
+      // Validasi biaya input
+      let params = {};
+      for (const { id, max } of inputs) {
+        const val = document.getElementById(id).value.trim();
+        const num = parseFloat(val);
+        if (isNaN(num) || num < 0 || num > max) {
+          document.getElementById(id).classList.add("error");
+          error = true;
+        } else {
+          params[id] = id.startsWith("p_") ? num / 100 : num;
         }
       }
 
-      hasilDiv.innerHTML += "<div style='font-size:14px;margin-top:10px;'>Catatan: disarankan untuk membulatkan harga jual ke atas agar penghasilan tidak terlalu mepet.</div>";
+      // Validasi setiap penghasilan bersih
+      const bersihValues = [];
+      for (const input of bersihInputs) {
+        const val = input.value.trim();
+        const num = parseInt(val);
+        if (isNaN(num) || num <= 0) {
+          input.classList.add("error");
+          error = true;
+        } else {
+          bersihValues.push(num);
+        }
+      }
+
+      if (error) {
+        hasilDiv.innerHTML = "<div style='color:red;'>Harap periksa input yang salah (berwarna merah).</div>";
+        return;
+      }
+
+      const layanan_max = 20000;
+      const promo_max = 10000;
+      const flat_biaya = params.biaya_program + params.biaya_proses;
+
+      for (const bersih of bersihValues) {
+        let x = bersih + flat_biaya;
+        while (true) {
+          const admin = params.p_admin * x;
+          const premi = params.p_premi * x;
+          const layanan = Math.min(params.p_layanan * x, layanan_max);
+          const promo = Math.min(params.p_promo * x, promo_max);
+          const total = admin + premi + layanan + promo + flat_biaya;
+          if (x - total >= bersih) break;
+          x += 1;
+        }
+        hasilDiv.innerHTML += `<div>Untuk penghasilan Rp ${bersih} → harga jual: <strong>Rp ${x}</strong></div>`;
+      }
     }
   </script>
 </body>
