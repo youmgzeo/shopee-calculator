@@ -50,27 +50,6 @@
       background-color: #ffe6e6;
     }
 
-    .error-message {
-      color: red;
-      font-size: 14px;
-      margin-top: 4px;
-    }
-
-    button {
-      font-size: 16px;
-      padding: 10px;
-      margin-top: 20px;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #2980b9;
-    }
-
     .warning-box {
       background-color: #ffcccc;
       padding: 15px;
@@ -110,6 +89,21 @@
 
     hr {
       margin-top: 40px;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 10px;
+      margin-top: 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
     }
   </style>
 </head>
@@ -166,8 +160,7 @@
 
   <hr />
   <div style="text-align:center; font-size:14px;">
-    Dibuat oleh youmgzeo. Terinspirasi dari lhsnimarchieve &amp; geniustangerine.<br />
-    <a href="https://x.com/youmgzeo" target="_blank">@youmgzeo</a>
+    Hubungi <a href="https://x.com/youmgzeo" target="_blank">@youmgzeo</a> untuk kritik dan saran.
   </div>
 
   <script>
@@ -193,11 +186,9 @@
       const paramIds = ["p_admin", "p_premi", "p_layanan", "p_promo", "biaya_program", "biaya_proses"];
       const params = {};
 
-      // Reset error state
       document.querySelectorAll("input").forEach(el => el.classList.remove("error"));
       let error = false;
 
-      // Ambil nilai parameter biaya (kosong = dianggap 0)
       for (const id of paramIds) {
         const el = document.getElementById(id);
         const val = el.value.trim();
@@ -214,7 +205,6 @@
         }
       }
 
-      // Ambil nilai bersih
       const bersihValues = [];
       for (const input of bersihInputs) {
         const val = input.value.trim();
@@ -238,17 +228,27 @@
 
       for (const bersih of bersihValues) {
         let x = bersih + flat_biaya;
+
         while (true) {
           const admin = params.p_admin * x;
           const premi = params.p_premi * x;
           const layanan = Math.min(params.p_layanan * x, layanan_max);
           const promo = Math.min(params.p_promo * x, promo_max);
           const total = admin + premi + layanan + promo + flat_biaya;
+
           if (x - total >= bersih) break;
           x += 1;
         }
-        hasilDiv.innerHTML += `<div>Untuk penghasilan Rp ${bersih} → harga jual: <strong>Rp ${x}</strong></div>`;
+
+        const bersihFmt = bersih.toLocaleString("id-ID");
+        const jualFmt = x.toLocaleString("id-ID");
+
+        hasilDiv.innerHTML += `<div>Untuk penghasilan <strong>Rp${bersihFmt}</strong> → harga jual: <strong>Rp${jualFmt}</strong></div>`;
       }
+
+      hasilDiv.innerHTML += `<div style="font-size:14px; margin-top:10px; color:#555;">
+        Catatan: disarankan untuk membulatkan harga jual ke atas untuk menghindari minus.
+      </div>`;
     }
   </script>
 </body>
